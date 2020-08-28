@@ -44,3 +44,71 @@ Sleep(50);//等待翻页
 }
 return 0;
 }
+
+
+//demo
+#include<iostream>
+#include<windows.h>
+ 
+#define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) //必要的，我是背下来的 
+ 
+using namespace std;
+ 
+int main(){
+	while(1){
+		printf("鼠标左键是否按下：");
+		if(KEY_DOWN(VK_LBUTTON))printf("是");
+		else printf("否");
+		printf("\n");
+		
+		printf("鼠标右键是否按下：");
+		if(KEY_DOWN(VK_RBUTTON))printf("是");
+		else printf("否");
+		printf("\n");
+		
+		printf("鼠标滚轮键是否按下：");
+		if(KEY_DOWN(VK_MBUTTON))printf("是");
+		else printf("否");
+		printf("\n");
+		
+		Sleep(20);//循环时间间隔，防止太占内存 
+		system("cls");//清屏 
+	}
+ 
+	return 0;
+}
+
+
+//multithread
+
+#include <iostream>
+// 必须的头文件
+#include <pthread.h>
+ 
+using namespace std;
+ 
+#define NUM_THREADS 5
+ 
+// 线程的运行函数
+void* say_hello(void* args)
+{
+    cout << "Hello Runoob！" << endl;
+    return 0;
+}
+ 
+int main()
+{
+    // 定义线程的 id 变量，多个变量使用数组
+    pthread_t tids[NUM_THREADS];
+    for(int i = 0; i < NUM_THREADS; ++i)
+    {
+        //参数依次是：创建的线程id，线程参数，调用的函数，传入的函数参数
+        int ret = pthread_create(&tids[i], NULL, say_hello, NULL);
+        if (ret != 0)
+        {
+           cout << "pthread_create error: error_code=" << ret << endl;
+        }
+    }
+    //等各个线程退出后，进程才结束，否则进程强制结束了，线程可能还没反应过来；
+    pthread_exit(NULL);
+}
