@@ -169,3 +169,8 @@ int main(int argc, char *argv[])
     EnumWindows(EnumWindowsProc, 0);
     return 0;
 }
+
+//get timestamp
+time_t myt=time(NULL);
+    cout<<"sizeof(time_t) is: "<<sizeof(time_t)<<endl;
+    cout<<"myt is :"<<myt<<endl;
