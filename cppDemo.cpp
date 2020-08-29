@@ -112,3 +112,60 @@ int main()
     //等各个线程退出后，进程才结束，否则进程强制结束了，线程可能还没反应过来；
     pthread_exit(NULL);
 }
+
+//获取桌面的所有句柄
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+BOOL CALLBACK EnumChildProc(HWND   hwnd,LPARAM lParam)
+{
+    char szTitle[MAX_PATH] = {0};
+    char szClass[MAX_PATH] = {0};
+    int nMaxCount = MAX_PATH;
+
+    LPSTR lpClassName = szClass;
+    LPSTR lpWindowName = szTitle;
+
+    GetWindowTextA(hwnd, lpWindowName, nMaxCount);
+    GetClassNameA(hwnd, lpClassName, nMaxCount);
+    cout << "[Child window] window handle: " << hwnd << " window name: "
+         << lpWindowName << " class name " << lpClassName << endl;
+
+    return TRUE;
+}
+
+
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
+{
+
+    /*
+     * Remarks
+        The EnumWindows function does not enumerate child windows,
+        with the exception of a few top-level windows owned by the
+        system that have the WS_CHILD style.
+     */
+    char szTitle[MAX_PATH] = {0};
+    char szClass[MAX_PATH] = {0};
+    int nMaxCount = MAX_PATH;
+
+    LPSTR lpClassName = szClass;
+    LPSTR lpWindowName = szTitle;
+
+    GetWindowTextA(hwnd, lpWindowName, nMaxCount);
+    GetClassNameA(hwnd, lpClassName, nMaxCount);
+    cout << "[Parent window] window handle: " << hwnd << " window name: "
+         << lpWindowName << " class name " << lpClassName << endl;
+
+    EnumChildWindows(hwnd, EnumChildProc, lParam);
+
+    return TRUE;
+}
+
+
+int main(int argc, char *argv[])
+{
+    EnumWindows(EnumWindowsProc, 0);
+    return 0;
+}
