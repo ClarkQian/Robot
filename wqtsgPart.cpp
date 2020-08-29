@@ -5,6 +5,20 @@
 using namespace std;
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) //必要的，我是背下来的
 
+
+int getPixel(){
+    HDC hDC = ::GetDC(NULL); //获取屏幕DC
+    POINT pt;
+    GetCursorPos(&pt);
+    COLORREF clr = ::GetPixel(hDC,pt.x,pt.y);
+    int res = clr;
+
+    ::ReleaseDC(NULL, hDC);
+    return clr;
+
+}
+
+
 void enter(int KeyCode){
     keybd_event(KeyCode, 0, 0, 0);
     keybd_event(KeyCode, 0, KEYEVENTF_KEYUP, 0);
@@ -63,10 +77,29 @@ void getSit(){
 
 
     //get the sit;
+    //370 758
+    Sleep(1000);
+    moveCursor(647, 563);
+    clickLeftMouse();
+    Sleep(100);
+    clickLeftMouse();
+    Sleep(100);
+    clickLeftMouse();
+    Sleep(100);
+    Sleep(500);
+
+    moveCursor(886, 567);
+    clickLeftMouse();
+    Sleep(100);
+    clickLeftMouse();
+    Sleep(100);
+    clickLeftMouse();
+    Sleep(100);
 }
 
 void detectMousPosition(){
     while(true){
+        cout<<"Working"<<endl;
         if(KEY_DOWN(VK_LBUTTON)){
             POINT p;
             GetCursorPos(&p);
@@ -75,15 +108,20 @@ void detectMousPosition(){
         if(KEY_DOWN(0x51)){
             break;
         }
+        Sleep(500);
     }
 }
+
 
 int main() {
     showupWindowAndFull("wechat");
     gtSeachAndInput(117,30,"wqtsg");
     getSit();
+//    370 758
+
 
 //    detectMousPosition();
+//    ::ReleaseDC(NULL, hDC); //释放屏幕DC
     return 0;
 
 }
